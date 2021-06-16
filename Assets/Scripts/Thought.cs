@@ -9,10 +9,18 @@ public class Thought : MonoBehaviour
     public Camera cam;
 
     public bool onMouse = false;
+    bool beenTouched = false;
+
+    public GameManager m_gameManager;
+
+    GameObject target = null;
+
+    public GameObject bird;
 
     private void Awake()
     {
         m_thoughtManager = GameObject.Find("ThoughtManager").GetComponent<ThoughtManager>();
+        m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         cam = Camera.main;
 
@@ -42,6 +50,7 @@ public class Thought : MonoBehaviour
             if (hit.collider != null && hit.collider.transform == transform)
             {
                 Debug.Log("on obj");
+                beenTouched = true;
                 onMouse = true;
             }
         }
@@ -57,6 +66,33 @@ public class Thought : MonoBehaviour
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
             rb.velocity = Vector2.ClampMagnitude((pos - (Vector2)transform.position) * 10,10);
+        }
+        else
+        {
+            if (!beenTouched)
+            {
+                if (!target)
+                {
+                    float dist = Mathf.Infinity;
+
+                    foreach (GameObject _ring in m_gameManager.rings)
+                    {
+                        if (Vector2.Distance(_ring.transform.position, gameObject.transform.position) <= dist)
+                        {
+                            target = _ring;
+                        }
+
+                    }
+                }
+
+                if (target)
+                {
+                    transform.position += ((target.transform.position) - transform.position).normalized * Time.deltaTime;
+                    transform.position -= new Vector3(bird.GetComponent<BirdMovement>().velocity.x, 0, 0) * Time.deltaTime;
+                }
+            }
+            
+            
         }
 
 

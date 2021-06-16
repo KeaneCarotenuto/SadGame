@@ -9,6 +9,9 @@ public class ThoughtManager : MonoBehaviour
 
     public float anxietyLevel = 0;
 
+    public float spawnTime = 2;
+    float lastSpawnTime;
+
     public GameObject aBar;
     public GameObject aLevel;
 
@@ -16,10 +19,14 @@ public class ThoughtManager : MonoBehaviour
 
     public List<GameObject> m_thoughts = new List<GameObject>();
 
+    public GameObject bird;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        lastSpawnTime = 0;
+
         m_thoughts.Clear();
     }
 
@@ -44,17 +51,19 @@ public class ThoughtManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        anxietyLevel += 10 * Time.deltaTime;
+        anxietyLevel += 5 * Time.deltaTime;
+        anxietyLevel = Mathf.Clamp(anxietyLevel, 0, 100);
 
-        float r = Random.Range(0, 1000.0f);
-
-        if (r < anxietyLevel && m_thoughts.Count < 20 && ((int)Time.time) % 1 == 0 )
+        if (Time.time - lastSpawnTime > spawnTime)
         {
+            lastSpawnTime = Time.time;
             GameObject t = Instantiate(m_thoughtPref, new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0), Quaternion.identity, canvas.transform);
             m_thoughts.Add(t);
+
+            t.GetComponent<Thought>().bird = bird;
         }
       
         RectTransform bar = aLevel.GetComponent<RectTransform>();
-        bar.sizeDelta = new Vector2(anxietyLevel, bar.rect.height);
+        bar.sizeDelta = new Vector2(anxietyLevel * 5, bar.rect.height);
     }
 }

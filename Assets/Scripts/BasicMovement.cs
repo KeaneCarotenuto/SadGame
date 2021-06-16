@@ -20,6 +20,8 @@ public class BasicMovement : MonoBehaviour
     {
         float moveSpeed = 200;
 
+        Debug.Log(((transform.position.x * 10) % 20) / 10);
+
         Vector3 vel = new Vector3();
 
         if (Input.GetKey(KeyCode.S))
