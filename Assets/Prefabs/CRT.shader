@@ -50,41 +50,37 @@
                 fixed4 col = tex2D(_MainTex, i.uv);
                 fixed4 copyCol = col;
 
-                int fixed = 4;
-                float div = 0.3;
+                //Size of the CRT pixels (minimum: 4)
+                int cellSize = 4;
 
-
-                if (int(i.vertex.x) % fixed <= 1) {
+                //Split into RGB cells and determine brightness by the pixel that should be there
+                if (int(i.vertex.x) % cellSize <= (cellSize - 1) / 3) {
                     col = fixed4(col.x, 0, 0, 1);
                 }
-                else if (int(i.vertex.x) % fixed <= 2) {
+                else if (int(i.vertex.x) % cellSize <= 2 * (cellSize - 1) / 3) {
                     col = fixed4(0, col.y, 0, 1);
                 }
-                else if (int(i.vertex.x) % fixed <= 3) {
+                else if (int(i.vertex.x) % cellSize <= 3 * (cellSize - 1) / 3) {
                     col = fixed4(0, 0, col.z, 1);
                 }
                 
-                col += copyCol * 0.75;
+                //Add back some original colour
+                col += copyCol * 0.2;
 
-                if (int(i.vertex.x) % fixed == 0) {
+                //Clear black lines between cells (horiz and vert)
+                if (int(i.vertex.x) % cellSize == 0) {
+                    col = fixed4(0, 0, 0, 1);
+                }
+                if (int(i.vertex.y) % cellSize == 0) {
                     col = fixed4(0, 0, 0, 1);
                 }
 
-                if (int(i.vertex.y) % 4 == 0) {
-                    col = fixed4(0, 0, 0, 1);
-                }
-
+                //Scan line kind of thing
                 int x = int(_Time.y * 1920) % 3000;
-                
-                int multi = 2;
-                if ( int(x/ multi)* multi == int(i.vertex.x/ multi)* multi) {
+                int width = 2;
+                if ( int(x/ width)* width == int(i.vertex.x/ width)* width) {
                     col = fixed4(0, 0, 0, 1);
                 }
-
-                
-
-
-                
 
                 return col;
             }
