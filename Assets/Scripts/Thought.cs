@@ -22,7 +22,7 @@ public class Thought : MonoBehaviour
         m_thoughtManager = GameObject.Find("ThoughtManager").GetComponent<ThoughtManager>();
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-        cam = Camera.main;
+        cam = GameObject.Find("Cam").GetComponent<Camera>(); ;
 
         if (!m_thoughtManager)
         {
