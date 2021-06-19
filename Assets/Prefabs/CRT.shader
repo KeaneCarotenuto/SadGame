@@ -50,32 +50,41 @@
                 fixed4 col = tex2D(_MainTex, i.uv);
                 fixed4 copyCol = col;
 
-                i.uv.x *= 1080;
-                i.uv.y *= 1920;
-
-                int fixed = 10;
+                int fixed = 4;
                 float div = 0.3;
 
+
+                if (int(i.vertex.x) % fixed <= 1) {
+                    col = fixed4(col.x, 0, 0, 1);
+                }
+                else if (int(i.vertex.x) % fixed <= 2) {
+                    col = fixed4(0, col.y, 0, 1);
+                }
+                else if (int(i.vertex.x) % fixed <= 3) {
+                    col = fixed4(0, 0, col.z, 1);
+                }
+                
+                col += copyCol * 0.75;
 
                 if (int(i.vertex.x) % fixed == 0) {
                     col = fixed4(0, 0, 0, 1);
                 }
-                else if (int(i.vertex.x) % fixed <= 3) {
-                    col = fixed4(col.x, 0, 0, 1);
-                }
-                else if (int(i.vertex.x) % fixed <= 6) {
-                    col = fixed4(0, col.y, 0, 1);
-                }
-                else if (int(i.vertex.x) % fixed <= 9) {
-                    col = fixed4(0, 0, col.z, 1);
-                }
-                
 
-                if (int(i.vertex.y) % 10 == 3) {
+                if (int(i.vertex.y) % 4 == 0) {
                     col = fixed4(0, 0, 0, 1);
                 }
 
-                col += copyCol * 0.75;
+                int x = int(_Time.y * 1920) % 3000;
+                
+                int multi = 2;
+                if ( int(x/ multi)* multi == int(i.vertex.x/ multi)* multi) {
+                    col = fixed4(0, 0, 0, 1);
+                }
+
+                
+
+
+                
 
                 return col;
             }
