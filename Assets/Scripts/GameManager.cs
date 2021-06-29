@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     public float playerScore = 0;
 
-    public float spawnTime = 1;
+    public float spawnTime ;
     float lastSpawnTime = 0;
 
     public TextMeshProUGUI scoreText;

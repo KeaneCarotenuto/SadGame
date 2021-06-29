@@ -51,7 +51,7 @@
                 fixed4 copyCol = col;
 
                 //Size of the CRT pixels (minimum: 4)
-                int cellSize = 4;
+                int cellSize = 10;
 
                 //Split into RGB cells and determine brightness by the pixel that should be there
                 if (int(i.vertex.x) % cellSize <= (cellSize - 1) / 3) {
@@ -65,7 +65,7 @@
                 }
                 
                 //Add back some original colour
-                col += copyCol * 0.2;
+                col += copyCol * 0.75;
 
                 //Clear black lines between cells (horiz and vert)
                 if (int(i.vertex.x) % cellSize == 0) {
